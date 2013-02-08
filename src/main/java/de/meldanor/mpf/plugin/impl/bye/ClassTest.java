@@ -16,17 +16,16 @@
  * along with MelPluginFramework.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.meldanor.mpf.plugin.impl;
+package de.meldanor.mpf.plugin.impl.bye;
 
-import de.meldanor.mpf.plugin.MPFPlugin;
-import de.meldanor.mpf.plugin.impl.bye.ClassTest;
-
-public class ByeTest implements MPFPlugin {
-
-    public void test() {
-        System.out.println("ByePlugin says 'Bye'");
-        ClassTest.test1();
-        new ClassTest();
+public class ClassTest {
+    
+    public static void test1() {
+        System.out.println("Bye Plugin - static test");
+    }
+    
+    public ClassTest () {
+        System.out.println("Bye Plugin - constructor test");
     }
 
 }

@@ -23,13 +23,12 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import de.meldanor.mpf.classloader.MultiClassLoader;
 import de.meldanor.mpf.plugin.MPFPlugin;
 
 public class PluginManager {
@@ -39,7 +38,10 @@ public class PluginManager {
 
     private List<MPFPlugin> pluginList;
 
+    private MultiClassLoader clazzLoader;
+
     public PluginManager(String pluginPath) {
+        this.clazzLoader = new MultiClassLoader();
         loadPlugins(pluginPath);
     }
 
@@ -80,13 +82,8 @@ public class PluginManager {
 
         zipFile.close();
 
-        URL[] urls = {pluginFile.toURI().toURL()};
-
-        URLClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
-        Class<? extends MPFPlugin> pluginClass = loader.loadClass(desc.getMainClass()).asSubclass(MPFPlugin.class);
-        loader.close();
-
-        pluginList.add(pluginClass.newInstance());
+        MPFPlugin plugin = clazzLoader.createClazz(desc.getMainClass(), pluginFile.toURI().toURL(), MPFPlugin.class);
+        pluginList.add(plugin);
     }
 
     private PluginDescription readDescription(InputStream in) throws Exception {
