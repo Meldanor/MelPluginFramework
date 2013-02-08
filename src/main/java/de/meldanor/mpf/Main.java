@@ -25,7 +25,7 @@ import de.meldanor.mpf.plugin.MPFPlugin;
 public class Main {
 
     public static void main(String[] args) {
-        PluginManager pm = new PluginManager("E:/Projekte/MelPluginFramework/src/test/resources");
+        PluginManager pm = new PluginManager("src/test/resources");
         List<MPFPlugin> list = pm.getPluginList();
         for (MPFPlugin mpfPlugin : list) {
             mpfPlugin.test();
