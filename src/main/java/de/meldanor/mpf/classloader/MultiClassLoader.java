@@ -43,8 +43,16 @@ public class MultiClassLoader extends ClassLoader {
         return loader;
     }
 
-    public boolean unloadClazz(URL jarFile) {
-        return this.registeredLoaders.remove(jarFile) != null;
+    public boolean unloadClazz(URL jarFile) throws Throwable {
+        JarClassLoader loader = this.registeredLoaders.remove(jarFile);
+
+        if (loader != null) {
+            loader.clearAssertionStatus();
+            loader.close();
+            this.finalize();
+            return true;
+        }
+        return false;
     }
 
 }

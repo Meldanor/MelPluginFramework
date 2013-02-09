@@ -16,7 +16,7 @@
  * along with MelPluginFramework.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.meldanor.mpf.plugin.impl.bye;
+package impl.bye;
 
 public class ClassTest {
     

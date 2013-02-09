@@ -16,15 +16,20 @@
  * along with MelPluginFramework.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.meldanor.mpf.plugin.impl;
+package impl;
 
 import de.meldanor.mpf.plugin.MPFPlugin;
 
 public class HelloTest implements MPFPlugin {
 
     public void test() {
-        System.out.println("HelloPlugin says 'Hello'");
+//        System.out.println("HelloPlugin says 'Hello'");
+        test1();
 
+    }
+
+    public void test1() {
+        System.out.println("The newHelloPlugin says 'Hi");
     }
 
 }

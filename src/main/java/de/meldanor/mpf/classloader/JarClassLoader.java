@@ -18,23 +18,12 @@
 
 package de.meldanor.mpf.classloader;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Path;
 
 public class JarClassLoader extends URLClassLoader {
 
     private URL url;
-
-    public JarClassLoader(File file) throws MalformedURLException {
-        this(file.toURI().toURL());
-    }
-
-    public JarClassLoader(Path path) throws MalformedURLException {
-        this(path.toUri().toURL());
-    }
 
     public JarClassLoader(URL url) {
         super(new URL[]{url});

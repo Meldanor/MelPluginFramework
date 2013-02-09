@@ -23,8 +23,11 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -37,11 +40,13 @@ public class PluginManager {
     public static final String PLUGIN_DESCRIPTION_ENDING = ".txt";
 
     private List<MPFPlugin> pluginList;
+    private Map<MPFPlugin, URL> pluginMap;
 
     private MultiClassLoader clazzLoader;
 
     public PluginManager(String pluginPath) {
         this.clazzLoader = new MultiClassLoader();
+        this.pluginMap = new HashMap<MPFPlugin, URL>();
         loadPlugins(pluginPath);
     }
 
@@ -55,7 +60,6 @@ public class PluginManager {
 
         System.out.println("Loading " + pluginFiles.length + " plugins...");
         this.pluginList = new ArrayList<MPFPlugin>(pluginFiles.length);
-
         for (File file : pluginFiles) {
             try {
                 loadPlugin(file);
@@ -65,7 +69,7 @@ public class PluginManager {
         }
     }
 
-    private void loadPlugin(File pluginFile) throws Exception {
+    public void loadPlugin(File pluginFile) throws Exception {
         ZipFile zipFile = new ZipFile(pluginFile);
 
         ZipEntry ze = zipFile.getEntry("plugin.txt");
@@ -84,6 +88,7 @@ public class PluginManager {
 
         MPFPlugin plugin = clazzLoader.createClazz(desc.getMainClass(), pluginFile.toURI().toURL(), MPFPlugin.class);
         pluginList.add(plugin);
+        pluginMap.put(plugin, pluginFile.toURI().toURL());
     }
 
     private PluginDescription readDescription(InputStream in) throws Exception {
@@ -100,6 +105,16 @@ public class PluginManager {
         }
         bReader.close();
         return new PluginDescription(name, mainClass);
+    }
+
+    public boolean unloadPlugin(MPFPlugin plugin) throws Throwable {
+        if (!clazzLoader.unloadClazz(pluginMap.remove(plugin))) {
+            System.out.println("Plugin " + plugin + " not registered!");
+            return false;
+        }
+        pluginList.remove(plugin);
+        System.gc();
+        return true;
     }
 
     public List<MPFPlugin> getPluginList() {

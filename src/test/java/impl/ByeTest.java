@@ -16,10 +16,10 @@
  * along with MelPluginFramework.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.meldanor.mpf.plugin.impl;
+package impl;
 
+import impl.bye.ClassTest;
 import de.meldanor.mpf.plugin.MPFPlugin;
-import de.meldanor.mpf.plugin.impl.bye.ClassTest;
 
 public class ByeTest implements MPFPlugin {
 
