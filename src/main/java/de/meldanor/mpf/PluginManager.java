@@ -28,7 +28,9 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import de.meldanor.mpf.classloader.MultiClassLoader;
+import org.xeustechnologies.jcl.JarClassLoader;
+import org.xeustechnologies.jcl.JclObjectFactory;
+
 import de.meldanor.mpf.plugin.MPFPlugin;
 
 public class PluginManager {
@@ -38,10 +40,10 @@ public class PluginManager {
 
     private List<MPFPlugin> pluginList;
 
-    private MultiClassLoader clazzLoader;
+    private JarClassLoader clazzLoader;
 
     public PluginManager(String pluginPath) {
-        this.clazzLoader = new MultiClassLoader();
+        this.clazzLoader = new JarClassLoader();
         loadPlugins(pluginPath);
     }
 
@@ -82,8 +84,11 @@ public class PluginManager {
 
         zipFile.close();
 
-        MPFPlugin plugin = clazzLoader.createClazz(desc.getMainClass(), pluginFile.toURI().toURL(), MPFPlugin.class);
-        pluginList.add(plugin);
+        clazzLoader.add(pluginFile.toURI().toURL());
+        JclObjectFactory factor = JclObjectFactory.getInstance();
+        Object o = factor.create(clazzLoader, desc.getMainClass());
+        MPFPlugin plugin = (MPFPlugin)o;
+        this.pluginList.add(plugin);
     }
 
     private PluginDescription readDescription(InputStream in) throws Exception {

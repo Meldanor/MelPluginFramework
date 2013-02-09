@@ -16,10 +16,23 @@
  * along with MelPluginFramework.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.meldanor.mpf.plugin;
+package de.meldanor.mpf;
 
-public interface MPFPlugin {
-    
-    public void test();
+import java.util.List;
+
+import org.junit.Test;
+
+import de.meldanor.mpf.plugin.MPFPlugin;
+
+public class PluginManagerTest {
+
+    @Test
+    public void test() {
+        PluginManager pm = new PluginManager("src/test/resources");
+        List<MPFPlugin> list = pm.getPluginList();
+        for (MPFPlugin mpfPlugin : list) {
+            mpfPlugin.test();
+        }
+    }
 
 }
